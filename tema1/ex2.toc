@@ -1,0 +1,20 @@
+\contentsline {chapter}{Knapsack}{2}{}%
+\contentsline {section}{\numberline {1}Problema 1}{2}{}%
+\contentsline {subsection}{\numberline {1.a}}{2}{}%
+\contentsline {subsection}{\numberline {1.b}}{2}{}%
+\contentsline {chapter}{Load Balance}{4}{}%
+\contentsline {section}{\numberline {1}Problema 1}{4}{}%
+\contentsline {subsection}{\numberline {1.a}}{4}{}%
+\contentsline {subsection}{\numberline {1.b}}{4}{}%
+\contentsline {section}{\numberline {2}Problema 3}{4}{}%
+\contentsline {chapter}{TSP}{6}{}%
+\contentsline {section}{\numberline {1}Problema 1}{6}{}%
+\contentsline {subsection}{\numberline {1.a}}{6}{}%
+\contentsline {subsection}{\numberline {1.b}}{6}{}%
+\contentsline {subsection}{\numberline {1.c}}{6}{}%
+\contentsline {chapter}{Vertex Cover}{9}{}%
+\contentsline {section}{\numberline {1}Problema 1}{9}{}%
+\contentsline {subsection}{\numberline {1.a}}{9}{}%
+\contentsline {subsection}{\numberline {1.b}}{9}{}%
+\contentsline {subsection}{\numberline {1.c}}{10}{}%
+\contentsline {subsection}{\numberline {1.d}}{11}{}%
