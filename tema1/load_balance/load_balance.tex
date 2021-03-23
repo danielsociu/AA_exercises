@@ -1,0 +1,68 @@
+\documentclass[a4paper]{report}
+\usepackage{listings}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+\title{Tema 1 Algoritmi Avansati}
+\author{Sociu Daniel}
+\begin{document}
+
+\chapter*{Load Balance}
+\addcontentsline{toc}{chapter}{Load Balance}
+\setcounter{section}{0}
+\section{Problema 1}
+Fie M1 si M2 lista job-urilor incarcate pe masina 1, respectiv masina 2
+
+\subsection{}
+Pentru a demonstra ca afirmatia e posibila sa fie adevarata, trebuie sa gasim minim un caz pe care e adevarata:
+
+Sa presupunem masinile cu job-urile:
+
+$M_{1}=\{80\}$
+
+$M_{2}=\{80,40\}$
+
+Observam ca $ALG=OPT \implies ALG\leq1.1*OPT$ deci afirmatia lui poate fi adevarata
+
+\subsection{}
+Pentru a demonstra ca afirmatia e false, aratam ca nu e exista un caz pentru care ar putea fi adevarata
+
+Considerand multimea job-urile J si stiind $\forall x_{i} \in J, x_{i}\leq10$, observam ca diferenta maxima in $OPT$ va fi 10,
+altfel o masina ar fi avut prea multa incarcatura, si ar exista o aranajare a job-urilor mai optima. Deci: \newline
+
+$OPT\leq \max\{95,105\} \leq 105$ (105 e val maxima pt $OPT$)
+
+Dar in cazul nostru:
+
+$ALG= \max\{80,120\}=120 \implies 1.1*OPT=1.1*105\approx116\leq ALG=120$ Ceea ce e fals, adica e imposibil ca algoritmul sa fie $1.1*OPT$
+
+\section{Problema 3}
+Din curs stim:
+
+Lema 1. \[OPT\geq \max\{\frac{1}{m} \sum_{1\leq i \leq n} t_{j} , \max\{t_{j} \mid 1\leq j \leq n\} \}\]
+
+Si stim ca $ALG\leq \frac{3}{2}OPT$
+
+Fie $K$ indicele masinii cu load-ul maxim la finalul algoritmului.
+
+Fie $q$ ultimul job adaugat masinii $K$
+
+Este evident ca algoritmul e optim in cazul in care sunt mai putine job-uri decat numarul masinilor, deci consideram cazul cand  avem mai mult de m job-uri
+
+Fie $load'(M)$ load-ul masinii dupa ce am adaugat primele $q-1$ job-uri dar nu si job-ul $q$
+
+O observatie importanta este ca $load'(K)$ este minimul dintre toate masinile si $load(K)=load'(K)+t(q)$, deci:
+
+\[ALG=load(K)=load'(K)+t_{q}\leq \frac{1}{m}\sum_{i=1}^{m}load'(i)+t_{q}=\frac{1}{m}\sum_{i=1}^{q-1}t_{i}+t_{q} \]
+
+Observam ca $t_{q}\leq \frac{1}{2}(t_{m} + t_{m+1})\leq OPT$ deoarece job-urile sunt sortate descrescator, deci ultimul job este mai mic sau egal cu media a 2 job-uri precedente. Deci:
+
+\[\frac{1}{m}\sum_{i=1}^{q-1}t_{i} + t_{q} \leq \frac{1}{m}(\sum_{i=1}^{n}t_{i} - t_{q}) + \frac{1}{2}(t_{m}+t_{m+1})\leq \frac{1}{m}\sum_{i=1}^{n}t_{i}-\frac{1}{2\cdot m}(t_{m}+t_{m+1})+\frac{1}{2}(t_{m}+t_{m+1})\leq\]
+Inlocuim cu $OPT$
+\[\implies \leq OPT-\frac{1}{2\cdot m}OPT + \frac{1}{2}OPT = \frac{3}{2}OPT - \frac{1}{2\cdot m}OPT = (\frac{3}{2}-\frac{1}{2\cdot m})OPT\]
+
+Deci avem ca:\[ALG\leq (\frac{3}{2}-\frac{1}{2\cdot m})OPT\]
+
+\end{document}
+
