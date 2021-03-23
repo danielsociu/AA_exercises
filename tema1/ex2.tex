@@ -215,7 +215,7 @@ Deci $OPT=len(1,3,5,2,4,1)=1+1+1+1+1=5$\\
 Deci avem ca:
 \[ALG\leq \frac{3}{2}OPT \Leftrightarrow ALG=8\leq \frac{3}{2}OPT = \frac{3}{2}5 = 7.5 \Leftrightarrow 8\leq 7.5\]
 
-Deci avem ca $ALG\geq \frac{3}{2}OPT$, adica $ALG$ nu este $\frac{3}{2}$ aproximativ.
+Deci avem ca $ALG> \frac{3}{2}OPT$, adica $ALG$ nu este $\frac{3}{2}$ aproximativ.
 
 \chapter*{Vertex Cover}
 \addcontentsline{toc}{chapter}{Vertex Cover}
@@ -248,7 +248,7 @@ Deci factorul de aproximare worst case este $ALG=2mOPT$
 
 \subsection{}
 
-Pentur a obtine un algoritm 3-aproximativ trebuie sa modificam linia 4, sa faca toate valorile $x_{i}=1, x_{i} \in C_{j}$
+Pentru a obtine un algoritm 3-aproximativ trebuie sa modificam linia 4, sa faca toate valorile $x_{i}=1, x_{i} \in C_{j}$
 
 \begin{tabbing}
 \hspace{2em}\= \kill 
@@ -297,7 +297,7 @@ Notam $OPT_{lin_{0/1}}$ rezultatul acestei probleme de programare liniara 0/1 si
 \[OPT_{lin_{0/1}}=OPT\]
 
 Dar problema de programare liniara 0/1 prezentata mai sus este NPC. Deci vom face o relaxare a problemei pentru a o duce in programare liniara cu numere reale. 
-Notam cu $x'_{i}$ valoarea lui $x_{i}$ dusa in $\in [0,1]$
+Notam cu $x'_{i}$ valoarea lui $x_{i}$ dusa in intervalul $[0,1]$, adica $x'_{i}\in [0,1]$
 
 Deci acum avem:
 
@@ -309,7 +309,7 @@ a.i. \> $x'_{a}+x'_{b}+x'_{c}\geq 1 \text{ unde } x_{a},x_{b},x_{c}\in C_{i}, i=
 \end{tabbing}
 
 Fie $OPT_{lin}$ valoarea sumei $\sum_{i=1}^{n}x'_{i}$ in urma rezolvarii problemei de programare liniara prezentata mai sus.
-Observam ca $OPT_{lin}\leq OPT_{lin_{0/1}}$ deoarece noi am facut o relaxare a variantei 0/1, adica este cel putin la fel de buna ca ea.
+Observam ca $OPT_{lin}\leq OPT_{lin_{0/1}}$ deoarece noi am facut o relaxare a constrangerilor variantei 0/1, adica este cel putin la fel de buna ca ea.
 
 Adica cum $OPT_{lin_{0/1}}=OPT$, obtinem:
 
@@ -327,7 +327,7 @@ Prog-liniara-3CNF($C$, $X$)\\
 \> a.i. \> $x'_{a}+x'_{b}+x'_{c}\geq 1 \text{ unde } x_{a},x_{b},x_{c}\in C_{i}, i=\overline{1,m}$ \\
 \> \> $0\leq x'_{i}\leq 1$\\
 \hspace{2em}\=\kill 
-4: $X=\{x_{i}=1 \mid x'_{i}\leq \frac{1}{3}\}$\\
+4: $X=\{x_{i}=1 \mid x'_{i}\geq \frac{1}{3}\}$\\
 5: return X
 \end{tabbing}
 
