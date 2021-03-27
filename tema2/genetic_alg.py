@@ -1,5 +1,6 @@
 import math
 import random
+import copy
 
 
 class Polinom:
@@ -111,6 +112,10 @@ class Polinom:
         """
         sum_f = 0.0
         probabilities = []
+        population_copy = []
+        for data in population:
+            new = copy.deepcopy(data)
+            population_copy.append(new)
         if show:
             print ("Selection probabilities")
         for data in population:
@@ -137,7 +142,8 @@ class Polinom:
             j = 0
             while selection_intervals[j + 1] < runif:
                 j += 1
-            selected_chromosomes.append(population[j])
+            new = copy.deepcopy(population[j])
+            selected_chromosomes.append(new)
             
             if show:
                 print ('u = {} selectam cromozomul {}'.format(
@@ -148,8 +154,12 @@ class Polinom:
             print()
         return selected_chromosomes
 
-    def __do_crossover__(self, population, population_size, pc, chromosome_length, show = 1):
+    def __crossover_population__(self, population, population_size, pc, chromosome_length, show = 1):
         part_chromosomes = []
+        population_copy = []
+        for data in population:
+            new = copy.deepcopy(data)
+            population_copy.append(new)
         for i in range(population_size):
             runif = random.random()
             if runif < pc:
@@ -175,11 +185,11 @@ class Polinom:
         for i in range(0, len(part_chromosomes) - 1, 2):
             break_point = random.randint(0, chromosome_length - 1)
 
-            chromosome_1 = population[part_chromosomes[i + 1]]['chromosome'][:break_point] +\
-                    population[part_chromosomes[i]]['chromosome'][break_point:]
+            chromosome_1 = population_copy[part_chromosomes[i + 1]]['chromosome'][:break_point] +\
+                    population_copy[part_chromosomes[i]]['chromosome'][break_point:]
 
-            chromosome_2 = population[part_chromosomes[i]]['chromosome'][:break_point] +\
-                    population[part_chromosomes[i + 1]]['chromosome'][break_point:]
+            chromosome_2 = population_copy[part_chromosomes[i]]['chromosome'][:break_point] +\
+                    population_copy[part_chromosomes[i + 1]]['chromosome'][break_point:]
 
             x_1 = self.__float_converter__(chromosome_1)
             x_2 = self.__float_converter__(chromosome_2)
@@ -191,27 +201,55 @@ class Polinom:
                     part_chromosomes[i],
                     part_chromosomes[i + 1]
                     ))
-                print (''.join(map(str, population[part_chromosomes[i]]['chromosome'])),
-                        ''.join(map(str, population[part_chromosomes[i + 1]]['chromosome'])),
+                print (''.join(map(str, population_copy[part_chromosomes[i]]['chromosome'])),
+                        ''.join(map(str, population_copy[part_chromosomes[i + 1]]['chromosome'])),
                         "at:", break_point
                     )
                 print ("Outcome:", 
                         ''.join(map(str, chromosome_1)),
                         ''.join(map(str, chromosome_2))
                     )
-            population[part_chromosomes[i]] = {
+            population_copy[part_chromosomes[i]] = {
                     'chromosome': chromosome_1,
                     'x_value': x_1,
                     'f_value': f_1
                     }
-            population[part_chromosomes[i + 1]] = {
+            population_copy[part_chromosomes[i + 1]] = {
                     'chromosome': chromosome_2,
                     'x_value': x_2,
                     'f_value': f_2
                     }
         if show:
             print()
-        return population
+        return population_copy
+
+    def __mutate_population__(self, population, population_size, pm, chromosome_length, show):
+        modified_chromosomes = []
+        population_copy = []
+        for data in population:
+            new = copy.deepcopy(data)
+            population_copy.append(new)
+
+        for i, data in enumerate(population_copy):
+            for j in range(chromosome_length):
+                runif = random.random()
+                changed = False
+                if runif < pm:
+                    data['chromosome'][j] ^= 1
+                    modified_chromosomes.append(i)
+                    changed = True
+                if changed:
+                    data['x_value'] = self.__float_converter__(data['chromosome'])
+                    data['f_value'] = self.coef_1 * math.pow(data['x_value'], 2) + self.coef_2 * data['x_value'] + self.coef_3
+        if show:
+            print ("Probability of mutation is {}", pm)
+            print ("The next chromosomes had their genes modififed:")
+            for chromos in set(modified_chromosomes):
+                print (chromos + 1)
+        return population_copy
+
+
+
 
     def find_maximum (self, population_size = 10, precision = 10, pc = 0.25, pm = 0.01, generations = 50, show = 1):
         """
@@ -240,71 +278,94 @@ class Polinom:
 
         population = initial_population
 
+        for i in range(generations):
 
-        # getting the probabilities of selecting
-        selection_probabilities = self.__population_selection_probabilities__(
-                population = population,
-                population_size = self.population_size,
-                show = show
-            )
+            # getting the probabilities of selecting
+            selection_probabilities = self.__population_selection_probabilities__(
+                    population = population,
+                    population_size = self.population_size,
+                    show = show
+                )
 
-        # getting intervals of selecting
-        selection_intervals = [0.0]
-        for i in range(1, self.population_size):
-            selection_intervals.append(selection_intervals[i - 1] + selection_probabilities[i - 1]) 
-        selection_intervals.append(1.0)
+            # getting intervals of selecting
+            selection_intervals = [0.0]
+            for i in range(1, self.population_size):
+                selection_intervals.append(selection_intervals[i - 1] + selection_probabilities[i - 1]) 
+            selection_intervals.append(1.0)
 
-        if show:
-            print ("Intervals of selection:")
-            print (' '.join(map(str, selection_intervals)))
+            if show:
+                print ("Intervals of selection:")
+                print (' '.join(map(str, selection_intervals)))
 
-        # Selecting chromosomes
-        selected_chromosomes = self.__select_chromosomes__(
-                selection_intervals = selection_intervals,
-                population = population,
-                population_size = self.population_size,
-                show = show
-            )
-        if show:
-            print("After selection:")
-            self.__output_population__(selected_chromosomes, self.population_size)
-            print()
+            # Selecting chromosomes
+            selected_chromosomes = self.__select_chromosomes__(
+                    selection_intervals = selection_intervals,
+                    population = population,
+                    population_size = self.population_size,
+                    show = show
+                )
+            if show:
+                print("After selection:")
+                self.__output_population__(selected_chromosomes, self.population_size)
+                print()
 
-        crossed_population = self.__do_crossover__(
-                population = population,
-                population_size = self.population_size,
-                pc = self.pc,
-                chromosome_length = self.chromosome_length,
-                show = show
-            )
+            crossed_population = self.__crossover_population__(
+                    population = population,
+                    population_size = self.population_size,
+                    pc = self.pc,
+                    chromosome_length = self.chromosome_length,
+                    show = show
+                )
 
-        if show:
-            print("After crossover:")
-            self.__output_population__(crossed_population, self.population_size)
-            print()
+            if show:
+                print("After crossover:")
+                self.__output_population__(crossed_population, self.population_size)
+                print()
+            
+            mutated_data = self.__mutate_population__(
+                    population = crossed_population,
+                    population_size = self.population_size,
+                    pm = self.pm,
+                    chromosome_length = self.chromosome_length,
+                    show = show
+                )
+            if show:
+                print("After mutation:")
+                self.__output_population__(mutated_data, self.population_size)
+                print()
 
-
-
-
-        # for i in range(generations):
-        #     selection_probabilities = self.__population_selection_probabilities__(
-        #             population = population,
-        #             population_size = self.population_size,
-        #             show = show
-        #         )
-        #     selection_intervals 
-
-        #     if i > 0:
-        #         show = False
-
-
+            if show:
+                print ("Evolutia maximului:")
+            maximum = -(1<<60)
+            for data in mutated_data:
+                maximum = max(data['f_value'], maximum)
+            print (maximum)
+            
+            # copying the new data for next operation
+            show = 0
+            population = []
+            for data in mutated_data:
+                new = copy.deepcopy(data)
+                population.append(new)
 
 
 def main():
-    polinom = Polinom(-1, 1, 2, -1, 2)
-    polinom.find_maximum(20, 6, 0.25, 0.01, 50)
+    polinom = Polinom(
+            coef_1 = -1,
+            coef_2 = 1, 
+            coef_3 = 2, 
+            inf_domain = -10, 
+            sup_domain = 20
+        )
+    polinom.find_maximum(
+            population_size = 20,
+            precision = 6,
+            pc = 0.25,
+            pm = 0.01,
+            generations = 10,
+            show = 1
+        )
+
 
 if __name__=="__main__":
     main()
-
-
