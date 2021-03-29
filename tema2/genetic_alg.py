@@ -370,11 +370,11 @@ class Polinom:
 def main():
     my_file = open ("Evolution.txt", "w")
     polinom = Polinom(
-            coef_1 = 1,
+            coef_1 = -1,
             coef_2 = 1, 
             coef_3 = 2, 
-            inf_domain = -10, 
-            sup_domain = 0,
+            inf_domain = -1, 
+            sup_domain = 2,
             f_in = my_file
         )
     polinom.find_maximum(
